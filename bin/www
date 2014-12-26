@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+var debug = require('debug')('HexmapWonder');
+var app = require('../app');
+
+app.app.set('port', process.env.PORT || 3000);
+
+var server = app.server.listen(app.app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});

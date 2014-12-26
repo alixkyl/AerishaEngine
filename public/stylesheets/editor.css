@@ -1,0 +1,13 @@
+
+#toolbar{
+}
+#drawArea{
+height:500px;
+}
+#drawArea> svg{
+height:100%;
+width:100%;
+}
+#sidebar{
+height:100%;
+}

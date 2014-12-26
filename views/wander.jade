@@ -1,0 +1,12 @@
+extends layout
+block scriptB
+  script(src="javascripts/myHex.js")
+  script(src="javascripts/drawLib.js")
+  script(src="javascripts/wanderLib.js")
+block onloadB
+  script.
+      function onload(){start();}
+block content
+  // Begin page content
+  .container(onload='onload()')
+    #drawArea.container

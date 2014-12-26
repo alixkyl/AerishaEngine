@@ -1,0 +1,1 @@
+set DEBUG=HexmapWonder & nodemon .\bin\www
