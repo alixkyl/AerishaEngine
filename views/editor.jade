@@ -4,13 +4,15 @@ block stylesheets
 block scriptB
   script(src="javascripts/myHex.js")
   script(src="javascripts/drawLib.js")
-  script(src="javascripts/editorLib.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.js")
+  script(src="javascripts/editor/editorApp.js")
+  
 block onloadB
   script.
-      function onload(){start();}
+      function onload(){}
 block contentB
   // Begin page content
-  .container
+  .container(ng-app="editorApp", ng-controller="AppCtrl")
     .jumbotron
       .row
         nav.navbar
@@ -21,15 +23,13 @@ block contentB
                 span.icon-bar
                 span.icon-bar
                 span.icon-bar
-              a.navbar-brand(href="#") HexmapWonder
+              a.navbar-brand(href="#") EDITOR
             #navbar.collapse.navbar-collapse
               ul.nav.navbar-nav
                 li(class=homeActive)
-                  a(href="/") Home
-                li(class=wanderActive)
-                  a(href="/wander") Wander
-                li(class=editorActive)
-                  a(href="/editor") Editor
+                  a(href="") Home
       .row
         #drawArea.col-md-8
         #sidebar.col-md-4
+          .well(infobx)
+          
