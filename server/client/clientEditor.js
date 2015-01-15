@@ -7,4 +7,8 @@ module.exports=function(id,socket,handler){
 	socket.on('move',function (data) {
 		socket.emit('maj',  handler.getMap() );
 	});
+	
+	socket.on('ApplyModification',function (data) {
+		handler.ApplyModificationEditor(data);
+	});
 };

@@ -18,6 +18,10 @@ module.exports=function(dataManager, clientManager){
 		return dataManager.getMapData();
 	}
   
+	this.ApplyModificationEditor=function(data){
+		dataManager.ApplyModificationEditor(data);
+	
+	}
   
 	this.getView = function(id,N){
 		delta=clients[id].coord;

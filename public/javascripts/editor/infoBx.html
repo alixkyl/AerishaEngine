@@ -1,6 +1,16 @@
 <form name="myForm">
-    <h2>{{focus._id}}</h2>
-    <br/>
+    <div>
+        <label>ID</label>
+        <label>{{focus._id}}</label>
+    </div>
+    <div>
+        <label>r</label>
+        <label>{{focus.r}}</label>
+    </div>
+    <div>
+        <label>q</label>
+        <label>{{focus.q}}</label>
+    </div>
     <div>
         <label>Name</label>
         <input type="text" name="name" ng-model="focus.name">
@@ -13,4 +23,8 @@
         <label>Moist</label>
         <input type="number" name="moist" ng-model="focus.moist">
     </div>
+    <div>
+        <Button id="infoBxApplyButton" onclick="">Apply</button>
+    </div>
+    <textarea >{{focus}}</textarea>
 </form>

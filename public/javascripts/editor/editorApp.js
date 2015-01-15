@@ -30,6 +30,10 @@ angular.module('editorApp',[])
     $scope.focus=data["0_0"];
     createContext($scope,data);
   });
+  $("infoBxApplyButton").onclick=function(){
+        socket.emit('ApplyModification',{r:0,q:0});
+    
+    }
   socket.emit('move',{r:0,q:0});
 })
 
