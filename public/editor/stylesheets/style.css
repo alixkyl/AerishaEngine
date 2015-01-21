@@ -1,0 +1,11 @@
+
+drawarea{
+height:500px;
+}
+drawarea> svg{
+height:500px;
+width:500px;
+}
+#sidebar{
+height:100%;
+}

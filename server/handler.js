@@ -17,7 +17,9 @@ module.exports=function(dataManager, clientManager){
 	this.getMap = function(){
 		return dataManager.getMapData();
 	}
-  
+	this.getChaData = function(){
+		return dataManager.getChaData();
+	}
 	this.ApplyModificationEditor=function(data){
 		dataManager.ApplyModificationEditor(data);
 	

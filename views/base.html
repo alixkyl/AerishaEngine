@@ -1,0 +1,45 @@
+<div class="container" ng-controller="tabs-controller as tab">
+	<!-- Static navbar -->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Hex Wonder</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li ng-class="{ active:tab.isSet(1) }">
+						<a href ng-click="tab.setTab(1)">Home</a>
+					</li>
+					<li ng-class="{ active:tab.isSet(2) }">
+						<a href ng-click="tab.setTab(2)">Wander</a>
+					</li>
+					<li ng-class="{ active:tab.isSet(3) }">
+						<a href ng-click="tab.setTab(3)">Editor</a>
+					</li>
+				</ul>
+				<div id="navbar" class="navbar-collapse collapse">
+				  <form class="navbar-form navbar-right">
+					<div class="form-group">
+					  <input type="text" placeholder="Email" class="form-control">
+					</div>
+					<div class="form-group">
+					  <input type="password" placeholder="Password" class="form-control">
+					</div>
+					<button type="submit" class="btn btn-success">Sign in</button>
+				  </form>
+				</div><!--/.navbar-collapse -->
+			</div><!--/.nav-collapse -->
+		</div><!--/.container-fluid -->
+	</nav>
+	<section ng-show="tab.isSet(1)" >
+		plop
+	</section>
+	<wander-app ng-show="tab.isSet(2)" ></wander-app>
+	<editor-app ng-show="tab.isSet(3)" ></editor-app>
+</div> <!-- /container -->

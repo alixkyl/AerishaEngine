@@ -4,8 +4,14 @@ module.exports=function(id,socket,handler){
 		socket.emit('maj',  handler.getViewEditor(id,30) );
 	});
 	
-	socket.on('move',function (data) {
+	socket.on('getMapData',function (data) {
 		socket.emit('maj',  handler.getMap() );
+	});
+	
+	socket.on('getCharacterData',function (data) {
+		var data=handler.getChaData();
+		console.log(data);
+		socket.emit('characterData', data );
 	});
 	
 	socket.on('ApplyModification',function (data) {
