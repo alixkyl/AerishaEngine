@@ -14,15 +14,18 @@ module.exports=function(dataManager, clientManager){
 		clients[id].coord.q += data.q/1;
 	}
   
-	this.getMap = function(){
-		return dataManager.getMapData();
+	this.getMapList = function(callback){
+		return dataManager.getMapList(callback);
 	}
-	this.getChaData = function(){
-		return dataManager.getChaData();
+	this.getMapDataOf = function(id,callback){
+		return dataManager.getMapDataOf(id,callback);
 	}
-	this.ApplyModificationEditor=function(data){
-		dataManager.ApplyModificationEditor(data);
 	
+	this.getCharList = function(callback){
+		return dataManager.getCharList(callback);
+	}
+	this.getCharDataOf = function(id,callback){
+		return dataManager.getCharDataOf(id,callback);
 	}
   
 	this.getView = function(id,N){

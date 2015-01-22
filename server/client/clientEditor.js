@@ -1,20 +1,26 @@
 module.exports=function(id,socket,handler){
 	
-	socket.on('update',function (data) {
-		socket.emit('maj',  handler.getViewEditor(id,30) );
+	socket.on('getMapList',function (data) {
+		handler.getMapList(function(data){
+			socket.emit('resMapList', data);
+		});
 	});
 	
-	socket.on('getMapData',function (data) {
-		socket.emit('maj',  handler.getMap() );
+	socket.on('getMapData',function (id) {
+		handler.getMapDataOf(id,function(data){
+			socket.emit('resMapData', data);
+		});
 	});
 	
-	socket.on('getCharacterData',function (data) {
-		var data=handler.getChaData();
-		console.log(data);
-		socket.emit('characterData', data );
+	socket.on('getCharList',function (data) {
+		handler.getCharList(function(data){
+			socket.emit('resCharList', data);
+		});
 	});
 	
-	socket.on('ApplyModification',function (data) {
-		handler.ApplyModificationEditor(data);
+	socket.on('getCharData',function (id) {
+		handler.getCharDataOf(id,function(data){
+			socket.emit('resCharData', data);
+		});
 	});
 };

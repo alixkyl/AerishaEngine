@@ -7,9 +7,12 @@ var hexSchema = mongoose.Schema({
                 height: Number,
                 moist: Number
             });
-			
-exports.Hex = mongoose.model('Hex', hexSchema);
-
+var mapSchema=mongoose.Schema({
+	name:String,
+	hexs:[hexSchema]
+});
+exports.Map = mongoose.model('Map', mapSchema);
+/**
 var organisationSchema = mongoose.Schema({
 				organisationId:String,
                 nameT: mongoose.Schema.Types.ObjectId,
@@ -17,8 +20,9 @@ var organisationSchema = mongoose.Schema({
                 supOrganisation:mongoose.Schema.Types.ObjectId,
 				subOrganisations:[mongoose.Schema.Types.ObjectId]
             });
-			
+		
 exports.Organisation = mongoose.model('Orgnisation', organisationSchema);
+*/
 /**
 var attributSchema = mongoose.Schema({
 	nameT:{type:String, default: "attribut" },

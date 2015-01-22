@@ -6,7 +6,7 @@ app.directive('infobox', function() {
 	return {
 		restrict:'E',
 		scope:{focus:'='},
-		templateUrl: 'editor/editor-map-infobox.html'
+		templateUrl: 'editor/edt-map-infobox.html'
 	};
 });
 

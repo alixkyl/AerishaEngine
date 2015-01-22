@@ -1,0 +1,14 @@
+<ul class="well">
+	<li class="nav nav-list">
+		<label >Maps</label>
+		<ul>
+			<li ng-repeat="map in map.list"><a ng-click="selectMap(map._id)">{{map._id}}</a></li>
+		</ul>
+	</li>
+	<li class="nav nav-list">
+		<label>Characters</label>
+		<ul>
+			<li ng-repeat="char in chars.list"><a ng-click="selectChar(char._id)">{{char._id}}</a></li>
+		</ul>
+	</li>
+</ul>

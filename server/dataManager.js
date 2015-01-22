@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-
+var mapGenerator = require('HexMapGenerator');
 var schemas = require('./data/dataSchema.js');
 
 function random (low, high) {
@@ -84,31 +84,26 @@ var dummyChar= function(i){
 	dummy.playerId="player "+i;
 	return dummy;
 }
+
 module.exports=new function(){
 	var mapData=new Array();
-	var characterData=new Array();
 
 	this.start=function(handler){
-		//var mapDatatmp=require('./data/plop.json');
+		// var mapDatatmp=require('./data/plop.json');
         mongoose.connect('mongodb://localhost:27017/test');
         var db = mongoose.connection;
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function (callback) {
             console.log('----');
+			// var map = new schemas.Map({
+				// name:"100,3,25,0.05",
+				// hexs:mapGenerator.generateMap(100,3,25,0.05)
+			// });
+			// map.save(function (err, data) {
+			  // if (err) return console.error(err);
+			  
+			// });
            /** 
-			for(var i in mapDatatmp){
-				var hex = new schemas.Hex({
-					name: mapDatatmp[i].name,
-					q: mapDatatmp[i].q,
-					r: mapDatatmp[i].r,
-					height: mapDatatmp[i].height,
-					moist: mapDatatmp[i].moist
-				});
-                hex.save(function (err, hex) {
-                  if (err) return console.error(err);
-                  console.log(hex);
-                });
-            }
 			for(var i=0; i<10; i++){
 				var c={};
 				var chara = new schemas.Character(dummyChar(i));
@@ -117,47 +112,36 @@ module.exports=new function(){
                   console.log(chara);
                 });
             }
-			/**
-			
-			
 			*/
-            schemas.Hex.find(function (err, hexs) {
-                if (err) return console.error(err);
-                mapData=hexs;
-                // for(var i = 0; i < hexs.length; i++){
-                    // mapData[hexs[i].q+"_"+hexs[i].r] = hexs[i];
-                // }
-            });
-			
-			schemas.Character.find(function (err, characs) {
-                if (err) return console.error(err);
-                characterData=characs;
-                // for(var i = 0; i < characterData.length; i++){
-					// // characs[i].remove(function(err,data){
-						// // if (err) return console.error(err);
-						// // console.log("**/*/**/*");
-					// // });
-                    // console.log(characterData[i]);
-                // }
-            });
         });
 	}
   
-	this.getMapData = function(){
-		return mapData;
-	
+	this.getMapList = function(callback){
+		schemas.Map.find({},'_id',function (err, data) {
+			if (err) return console.error(err);
+			callback(data);
+		});
 	};
 	
-	this.getChaData = function(){
-		return characterData;
+	this.getMapDataOf = function(id, callback){
+		schemas.Map.findById(id,function (err, data) {
+			if (err) return console.error(err);
+			callback(data);
+		});
 	};
 	
-	this.ApplyModificationEditor=function(data){
-		mapData[data._id] = data;
+	this.getCharList = function(callback){
+		schemas.Character.find({},'_id',function (err, data) {
+			if (err) return console.error(err);
+			callback(data);
+		});
 	};
 	
-	this.getMapDataOf = function(id){
-		return mapData[id];
+	this.getCharDataOf = function(id, callback){
+		schemas.Character.findById(id,function (err, data) {
+			if (err) return console.error(err);
+			callback(data);
+		});
 	};
 	
 };

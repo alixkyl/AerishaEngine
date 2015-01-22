@@ -1,44 +1,66 @@
 (function(){
-var app = angular.module('editor-directives',['editor-map','editor-chracter'])
- 
-app.factory('socket', function () {
-  var socket = io.connect('/editor');
-  return {
-    on: function (eventName, callback) {
-      socket.on(eventName, function () {  
-        var args = arguments;
-        $scope.$apply(function () {
-          callback.apply(socket, args);
-        });
-      });
-    },
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
-        var args = arguments;
-        $scope.$apply(function () {
-          if (callback) {
-            callback.apply(socket, args);
-          }
-        });
-      })
-    }
-  };
-});
- 
-app.controller('tabs-controller', function() {
-	this.tab=1;
-	this.isSet = function(checkTab) {
-		return this.tab === checkTab;
-	};
-	this.setTab = function(activeTab) {
-		this.tab = activeTab;
+var app = angular.module('editor-directives',['editor-map','editor-charater-sheet'])
+
+
+app.directive('editorSideBar', function() {
+	return {
+		restrict:'E',
+		scope:true,
+		templateUrl: 'editor/edt-side-bar.html',
+		controller:function(){
+			
+		}
 	};
 });
 
-app.directive('editorApp', function() {
+app.directive('editorApp', ['socket',function(socket) {
 	return {
-		restrict:'E',
-		templateUrl: 'editor/editor-app.html'
+		restrict:'A',
+		templateUrl: 'editor/edt-app.html',
+		controller:function($scope){
+			$scope.map={};
+			$scope.map.list=[];
+			$scope.chars={};
+			$scope.chars.list=[];
+			
+			var tab=1;
+			$scope.isSet = function(checkTab) {
+				return tab === checkTab;
+			};
+			var setTab = function(activeTab) {
+				tab = activeTab;
+			};
+			
+			$scope.selectMap=function(id){
+				console.log(id)
+				socket.emit('getMapData',id);
+				setTab(1);
+			};
+			
+			$scope.selectChar=function(id){
+				console.log(id)
+				socket.emit('getCharData',id);
+				setTab(2);
+			};
+			
+			socket.on('resMapData',function(data){
+				$scope.map.data=data;
+			});
+			
+			socket.on('resMapList',function(data){
+				$scope.map.list=data;
+				console.log(data);
+			});
+			socket.on('resCharData',function(data){
+				$scope.chars.data=data;
+			});
+			socket.on('resCharList',function(data){
+				$scope.chars.list=data;
+				console.log(data);
+			});
+			socket.emit('getMapList');
+			socket.emit('getCharList');
+		}
 	};
-});
+}]);
 })();

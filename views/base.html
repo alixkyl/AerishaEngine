@@ -1,6 +1,6 @@
-<div class="container" ng-controller="tabs-controller as tab">
+<div class="container-fluid" ng-controller="tabs-controller as tab">
 	<!-- Static navbar -->
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -37,9 +37,11 @@
 			</div><!--/.nav-collapse -->
 		</div><!--/.container-fluid -->
 	</nav>
-	<section ng-show="tab.isSet(1)" >
-		plop
-	</section>
-	<wander-app ng-show="tab.isSet(2)" ></wander-app>
-	<editor-app ng-show="tab.isSet(3)" ></editor-app>
+	<div class="container-fluid">
+		<div ng-show="tab.isSet(1)" >
+			plop
+		</div>
+		<wander-app ng-show="tab.isSet(2)" ></wander-app>
+		<div editor-app ng-show="tab.isSet(3)" ></div>
+	</div>
 </div> <!-- /container -->
