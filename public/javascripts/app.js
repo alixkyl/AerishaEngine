@@ -1,5 +1,5 @@
 (function(){
-var app = angular.module('app',['editor-directives'])
+var app = angular.module('app',['editor-app'])
  
 app.factory('socket', function ($rootScope) {
   var socket = io.connect('/editor');

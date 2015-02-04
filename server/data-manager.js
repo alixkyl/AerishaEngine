@@ -108,7 +108,7 @@ module.exports=new function(){
 	}
   
 	this.getMapList = function(callback){
-		schemas.Map.find({},'_id',function (err, data) {
+		schemas.Map.find({},'_id name',function (err, data) {
 			if (err) return console.error(err);
 			callback(data);
 		});
@@ -122,7 +122,7 @@ module.exports=new function(){
 	};
 	
 	this.getCharList = function(callback){
-		schemas.Character.find({},'_id',function (err, data) {
+		schemas.Character.find({},'_id name',function (err, data) {
 			if (err) return console.error(err);
 			callback(data);
 		});

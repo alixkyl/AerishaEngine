@@ -134,6 +134,7 @@ app.directive('drawarea',['d3Service', function(d3Service) {
 		}
 	};
 }]);
+
 app.directive('editorMap', ['socket',function(socket) {
 	return {
 		require:['infobox','drawarea'],
