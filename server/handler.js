@@ -27,6 +27,13 @@ module.exports=function(dataManager, clientManager){
 	this.getCharDataOf = function(id,callback){
 		return dataManager.getCharDataOf(id,callback);
 	}
+	
+	this.addNewMap = function(data,callback){
+		return dataManager.addNewMap(data,callback);
+	}
+	this.remMap = function(id,callback){
+		return dataManager.remMap(id,callback);
+	}
   
 	this.getView = function(id,N){
 		delta=clients[id].coord;

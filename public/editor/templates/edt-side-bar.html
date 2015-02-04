@@ -1,0 +1,16 @@
+<div class="row">
+	<label class="col-md-6" >Maps</label>
+	<a href class="col-md-2 col-offset-10" ng-click="addNewMap()">+ADD</a>
+</div>
+<ul>
+	<li ng-repeat="map in map.list">
+	<a href ng-click="selectMap(map._id)">{{map._id}}</a></li>
+</ul>
+<div class="row">
+	<label class="col-md-6">Characters</label>
+	<a href class="col-md-2 col-offset-10" ng-click="addNewChar()">+ADD</a>
+</div>
+<ul>
+	<li ng-repeat="char in chars.list">
+	<a href ng-click="selectChar(char._id)">{{char._id}}</a></li>
+</ul>

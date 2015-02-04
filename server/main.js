@@ -1,6 +1,6 @@
 module.exports=new function(){
-	var clientManager=require('./clientManager.js');
-	var dataManager=require('./dataManager.js');
+	var clientManager=require('./client-manager.js');
+	var dataManager=require('./data-manager.js');
 	var handler=require('./handler.js')(dataManager, clientManager);
 	
 	this.start = function(io){

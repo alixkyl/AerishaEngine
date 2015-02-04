@@ -6,7 +6,7 @@ app.directive('editorCharacter', ['socket',function(socket) {
 	return {
 		restrict:'E',
 		scope:{},
-		templateUrl: 'editor/edt-character.html',
+		templateUrl: 'editor/templates/edt-character.html',
 		controller:function($scope){
 			$scope.data = new Array();
 			$scope.focus={};

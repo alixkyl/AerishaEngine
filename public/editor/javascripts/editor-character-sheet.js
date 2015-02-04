@@ -5,7 +5,7 @@ app.directive('ecsRange', [function() {
 	return {
 		restrict:'E',
 		scope:{name:'@name',value:'=',maximum:'@max'},
-		templateUrl: 'editor/edt-char-range.html',
+		templateUrl: 'editor/templates/edt-char-range.html',
 		controller:function($scope){
 			$scope.getTimes=function(n){
 				return new Array(Number(n));
@@ -18,7 +18,7 @@ app.directive('ecsValue', [function() {
 	return {
 		restrict:'E',
 		scope:{name:'@name',value:'='},
-		templateUrl: 'editor/edt-char-val.html',
+		templateUrl: 'editor/templates/edt-char-val.html',
 		controller:function($scope){
 			$scope.getTimes=function(n){
 				return new Array(n);
@@ -31,7 +31,7 @@ app.directive('ecsAttributs', [function() {
 	return {
 		restrict:'E',
 		scope:{name:'@name',value:'='},
-		templateUrl: 'editor/edt-char-attr.html',
+		templateUrl: 'editor/templates/edt-char-attr.html',
 		controller:function($scope){
 			$scope.getTimes=function(n){
 				return new Array(n);
@@ -44,7 +44,7 @@ app.directive('editorCharacterSheet', [function() {
 		scope:{focus:'='},
 		require:['^ecsAttribut','ecsValue','ecsRange'],
 		restrict:'E',
-		templateUrl: 'editor/edt-char.html'
+		templateUrl: 'editor/templates/edt-char.html'
 	};
 }]);
 })();

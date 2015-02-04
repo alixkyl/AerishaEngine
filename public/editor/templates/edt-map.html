@@ -1,0 +1,9 @@
+<div class="row">
+	<label class="col-md-2">NAME:{{data.name}}</label>
+	<button class="col-md-2" ng-click="remMap()">Remove</button>
+	<button class="col-md-2" ng-click="remMap()">Save</button>
+</div>
+<div class="row">
+	<drawarea data="data.hexs" focus="focus" class="col-md-8"></drawarea>
+	<infobox focus="focus"class="col-md-4"></infobox>
+</div>

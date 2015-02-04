@@ -5,7 +5,7 @@ app.directive('infobox', function() {
 	return {
 		restrict:'E',
 		scope:{focus:'='},
-		templateUrl: 'editor/edt-map-infobox.html'
+		templateUrl: 'editor/templates/edt-map-infobox.html'
 	};
 });
 
@@ -137,11 +137,16 @@ app.directive('drawarea',['d3Service', function(d3Service) {
 app.directive('editorMap', ['socket',function(socket) {
 	return {
 		require:['infobox','drawarea'],
-		restrict:'E',
+		restrict:'A',
 		scope:{data:'='},
-		templateUrl: 'editor/edt-map.html',
+		templateUrl: 'editor/templates/edt-map.html',
 		controller:function($scope){
 			$scope.focus={};
+			$scope.remMap=function(){
+				socket.emit('remMap',$scope.data._id);
+				$scope.data={};
+				$scope.focus={}
+			}
 			socket.on('maj', function (data) {
 				$scope.data=data;
 				$scope.focus=data[0];

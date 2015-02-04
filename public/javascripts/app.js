@@ -26,7 +26,7 @@ app.factory('socket', function ($rootScope) {
 });
  
 app.controller('tabs-controller', function() {
-	this.tab=1;
+	this.tab=3;
 	this.isSet = function(checkTab) {
 		return this.tab === checkTab;
 	};
