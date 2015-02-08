@@ -12,6 +12,8 @@ app.directive('editorAppSide', ['socket',function(socket) {
 				var modalInstance = $modal.open({
 					templateUrl: 'editor/templates/edt-map-mod.html',
 					controller: function ($scope, $modalInstance) {
+						$scope.seed=0;
+						$scope.size=100;
 						$scope.ok = function () {
 							var data={
 								seed:$scope.seed,
@@ -101,14 +103,14 @@ app.directive('editorApp', ['socket',function(socket) {
 			}
 			
 			socket.on('resMapData',function(data){
-				$scope.map.data=data;
 				setTab(1);
+				$scope.map.data=data;
 				answered();
 			});
 			
 			socket.on('resMapList',function(data){
-				$scope.map.list=data;
 				setTab(0);
+				$scope.map.list=data;
 				answered();
 			});
 			socket.on('resCharData',function(data){
