@@ -26,15 +26,15 @@ app.directive('drawareaCanvas',function(){
 			var RADIUS=15;
 			var path= getPath(RADIUS);
 			function inititateBiome(){
-				var height = Math.range(-10,10,1);
+				var height = Math.range(-100,100,1);
 				var moist = Math.range(0,10,1);
-				console.log(height);
+				
 				return height.map(function(p){
 					
 					if(p>0){
-						return '#'+shadeColor(0x00FF00,p*10);
+						return '#'+shadeColor(0x00FF00,-p);
 					}else if(p<0){
-						return '#'+shadeColor(0x0000FF,p*10);
+						return '#'+shadeColor(0x0000FF,p);
 					}else{
 						return '#FFFF00';
 					}
@@ -58,7 +58,7 @@ app.directive('drawareaCanvas',function(){
 			var SQRT3=Math.sqrt(3);
 			function initiateView(p){
 				p.view={
-					fill:BIOME[p.height+10],
+					fill:BIOME[Math.floor(p.height*100)+100],
 					path : path,
 					x:RADIUS+RADIUS * SQRT3 * (p.q + p.r/2),
 					y:RADIUS+RADIUS * 3/2 * p.r
@@ -66,17 +66,12 @@ app.directive('drawareaCanvas',function(){
 				return p;
 			}
 			function hexbin(points) {return points.map(function(p) {return initiateView(p);});}
-			// if(point.height<0)
-						// point.fill='#'+shadeColor(0x0000FF,point.height*10);
-					// else if(point.height>=0)
-						// point.fill='#'+shadeColor(getBiomeColor(point.height,point.moist),-point.height*10);
-						// // binsById[id].fill='#'+shadeColor(0x00FF00,(1+point.moist)*5);
+			
 			scope.$watchCollection('data', function(newVals, oldVals) {
 					if (!newVals) return;
-					console.time("concatenation");
-					scope.initiateData(hexbin(newVals));
+					scope.points=hexbin(newVals.hexs);
+					scope.initiateData(newVals.width,newVals.height);
 					scope.render();
-					console.timeEnd("concatenation");
 					return ;
 				}, true);
 			
@@ -92,191 +87,108 @@ app.directive('drawareaCanvas',function(){
 				});
 			var layer = new Konva.Layer();
 			stage.add(layer);
-			var g = new Konva.Group({
+			
+			var root = new Konva.Group({
 				draggable: true,
 				dragBoundFunc: function(pos) {
-					var newX = pos.x > 0 ? 0 : pos.x;
-					newX = newX < layer.width()-(200*(15 * Math.sqrt(3))+15) ? layer.width()-(200*(15 * Math.sqrt(3))+15) : newX;
-					var newY = pos.y > 0 ? 0 : pos.y;
-					newY = newY < layer.height()-(200*(15 * 3/2)+15) ? layer.height()-(200*(15 * 3/2)+15) : newY;
+					var newX = pos.x;
+					if(pos.x > 0 || root.getScale().x*root.width() < stage.width()){
+						newX = 0 ;
+					}else if(newX < stage.width() - (root.getScale().x * root.width())){
+						newX = stage.width() - (root.getScale().x * root.width());
+					}
+					var newY = pos.y;
+					if(pos.y > 0 || root.getScale().y * root.height() < stage.height()){
+						newY = 0 ;
+					}else if(newY < stage.height() - (root.getScale().y * root.height())){
+						newY = stage.height() - (root.getScale().y * root.height());
+					}
 					return {
 						x: newX,
 						y: newY
 					};
 				}
 			});
-			
-			layer.add(g);
-			
-			var box;
+			var background = new Konva.Group();
+			var midground = new Konva.Group();
+			var foreground = new Konva.Group();
+			root.add(background);
+			root.add(midground);
+			root.add(foreground);
+			layer.add(root);
+			var focused;
 			// generate hexes
-			$scope.initiateData=function(points){
-				for (var i = 0; i<points.length; i++) {
-					var curr=points[i];
-					box = new Konva.Path({
+			$scope.initiateData=function(width, height){
+				background.destroyChildren();
+				root.width(width*(15 * Math.sqrt(3))+15);
+				root.height(height*(15 * 3/2)+15);
+				for (var i = 0; i<$scope.points.length; i++) {
+					var curr=$scope.points[i];
+					background.add(new Konva.Path({
 						id : i,
 						x : curr.view.x ,
 						y : curr.view.y ,
 						data: curr.view.path,
-						fill : curr.view.fill
-					});
-					g.add(box);
+						fill : curr.view.fill,
+						stroke:'#000000',
+						strokeEnabled:false
+					}));
 				}
-			}
+				background.cache({
+					width: root.width(),
+					height: root.height(),
+					x : background.x(),
+					y : background.y()
+				});
+			};
 			
 			$scope.render=function(){
-				g.cache({
-					width: 200*(15 * Math.sqrt(3))+15,
-					height: 200*(15 * 3/2)+15,
-					x : g.x(),
-					y : g.y(),
-					drawBorder: false
+				root.scale({
+					x : 0.1,
+					y : 0.1
 				});
 				layer.draw();
 			}
 			
-			// as all boxes stay separately with no overlap
-			// and they have no opacity
-			// we can call 'box.draw()' and we will have expected result
-			// REMEMBER that is this case box will be drawn on top of existing layer
-			// without clearing
-			layer.on('mouseover', function(evt) {
-				var box = evt.target;
-				$scope.focus=$scope.data[box.id()];
-				$scope.$apply();
-				box.fill('#EE0000');
-				box.draw();
+			background.on('mouseover', function(evt) {
+				var target = evt.target;
+				target.fill('#EE0000');
+				target.draw();
 			});
-			layer.on('mouseout', function(evt) {
-				var box = evt.target;
-				box.fill($scope.data[box.id()].view.fill);
-				box.draw();
+			background.on('mouseout', function(evt) {
+				var target = evt.target;
+				target.fill($scope.points[target.id()].view.fill);
+				layer.draw();
+			});
+			
+			background.on('click', function(evt) {
+				if(!focused){
+					focused = evt.target.clone();
+					focused.fill('#ffffff');
+					focused.strokeEnabled(true);
+					foreground.add(focused);
+					focused.opacity(0.5)
+				}
+				focused.x(evt.target.x());
+				focused.y(evt.target.y());
+				$scope.focus=$scope.points[evt.target.id()];
+				
+				layer.draw();
+				$scope.$apply();
+			});
+			layer.on('mousewheel', function(e) {
+				var zoomAmount = (e.evt.wheelDelta/120)*0.01;
+				if((root.getScale().x+zoomAmount)>0.1 && (root.getScale().x+zoomAmount)<1){
+					root.setScale({x : root.getScale().x+zoomAmount,
+						y : root.getScale().y+zoomAmount
+					});
+					layer.draw();
+				}
 			});
 		}
 	};
 });
-// app.directive('drawarea',['d3Service', function(d3Service) {
-    // return {
-		// scope:{data:'=',focus:'='},
-		// restrict:'E',
-		// templateUrl:'editor/templates/edt-map-drawarea.html',
-		
-		// link: function(scope, element, attrs, controllers) {
-			// d3Service.d3().then(function(d3) {
-				// var margin = parseInt(attrs.margin) || 0;
-				// var drawConfig = {};
-				// var hexbin = d3.hexbin();
-				// hexbin.size([3, 3]);
-				// hexbin.radius(3);
-				// var hexagon = hexbin.hexagon();
-				// // document.oncontextmenu = function() {
-					// // return false;
-				// // };
-				
-				
-				
-				// var zoom = d3.behavior.zoom()
-				// .scaleExtent([1, 10])
-				// .on("zoom", zoomed);
-				
-				// $('document').dblclick(function (e) {
-					// e.preventDefault();
-				// });
-				
-				
-				// var svg = d3.select(element[0]).select("svg");
-				// var groot = svg.select("g");
-				// drawConfig.g = groot.select("g");
-				
-				// function zoomed() {
-					// var trans=zoom.translate();
-					// if(trans[0]>0){
-						// trans[0]=0;
-					// }
-					// if(trans[1]>0){
-						// trans[1]=0;
-					// }
-					// var val=drawConfig.g.node().getBoundingClientRect();
-					// var valbox=svg.node().getBoundingClientRect();
-					
-					// if(val.width>valbox.width){
-						// if(trans[0]<-(val.width-valbox.width)){
-							// trans[0]=-(val.width-valbox.width);
-						// }
-					// }else{
-						// trans[0]=0;
-					// }
-					// if(val.height>valbox.height){
-						// if(trans[1]<-(val.height-valbox.height)){
-							// trans[1] = -(val.height-valbox.height);
-						// }
-					// }else{
-						// trans[1] = 0;
-					// }
-					// zoom.translate(trans);
-					// drawConfig.g.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
-				// };
-				// groot.attr("transform", "translate(" + margin + "," + margin + ")")
-				// .call(zoom);
-				
-				// var elFocus;
-				
-				// drawConfig.onclick=function(data,hex){
-					// if(elFocus){
-						// elFocus.style('stroke', 'none');
-						// elFocus.style('stroke-width', '0px');
-					// }
-					// elFocus = d3.select(d3.event.target);
-					// elFocus.style('stroke', '#F00');
-					// elFocus.style('stroke-width', '1px');
-					// scope.focus=data;
-					// scope.$apply();
-				// };
-				
-				// // Browser onresize event
-				// window.onresize = function() {
-					// scope.$apply();
-				// };
 
-				// //Watch for resize event
-				// // scope.$watch(function() {
-					// // return angular.element(window)[0].innerWidth;
-				// // }, function() {
-					// // scope.render();
-				// // });
-				// var points = [];
-				// scope.$watch('data', function(newVals, oldVals) {
-					// if (!newVals) return;
-					// console.time("concatenation");
-					// points = hexbin(newVals);
-					// console.timeEnd("concatenation");
-					// return scope.render(points);
-				// }, true);
-
-				// scope.render = function(data) {
-					// console.time("render");
-					// var chex=drawConfig.g.selectAll("hexagon")
-						// .data(points, function(d) {return d._id;});
-					
-					// chex.enter().append("g")
-						// .attr("transform", function(d) { return "translate("+ (d.x) + ","+ (d.y) + ")"; })
-						// .on("click", function(d){
-							// drawConfig.onclick(d);
-						// })
-						// .append("path")
-						// .attr("d", function(d) { return hexagon;})
-						// .attr('fill', function(d){return d.fill;})
-						// .on("mouseover", function(d){d3.select(this).style("fill", "black");})
-						// .on("mouseout", function(d){d3.select(this).style("fill", d.fill);});
-					
-					// chex.exit().remove();
-					// console.timeEnd("render");
-					
-				// };
-			// });
-		// }
-	// };
-// }]);
 
 app.directive('editorMap', ['socket',function(socket) {
 	return {
@@ -288,7 +200,7 @@ app.directive('editorMap', ['socket',function(socket) {
 			$scope.remMap=function(){
 				socket.emit('remMap',$scope.data._id);
 				$scope.data={};
-				$scope.focus={}
+				$scope.focus={};
 			}
 			socket.on('maj', function (data) {
 				$scope.data=data;

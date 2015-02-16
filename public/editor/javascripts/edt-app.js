@@ -13,11 +13,21 @@ app.directive('editorAppSide', ['socket',function(socket) {
 					templateUrl: 'editor/templates/edt-map-mod.html',
 					controller: function ($scope, $modalInstance) {
 						$scope.seed=0;
-						$scope.size=100;
+						$scope.patchSize=10;
+						$scope.landSea=0.1;
+						$scope.degree=3;
+						$scope.mwidth=100;
+						$scope.mheight=100;
+						$scope.noise=0.1;
 						$scope.ok = function () {
 							var data={
 								seed:$scope.seed,
-								size:$scope.size
+								patchSize:$scope.patchSize,
+								landSea:$scope.landSea,
+								degree:$scope.degree,
+								width:$scope.mwidth,
+								height:$scope.mheight,
+								noiseImpact:$scope.noise
 							}
 							$modalInstance.close(data);
 						  };
@@ -41,9 +51,10 @@ app.directive('editorAppSide', ['socket',function(socket) {
 				$scope.waitForAnswer();
 				socket.emit('addNewChar');
 			};
-			$scope.selectMap=function(id){
+			$scope.selectMap=function(index){
 				$scope.waitForAnswer();
-				socket.emit('getMapData',id);
+				socket.emit('getMapData',$scope.map.list[index]._id);
+
 			};
 			$scope.selectChar=function(id){
 				$scope.waitForAnswer();
@@ -77,15 +88,7 @@ app.directive('editorApp', ['socket',function(socket) {
 					awaitedAnswer++;
 					modalInstance = $modal.open({
 						templateUrl: 'editor/templates/edt-wait-mod.html',
-						controller: function ($scope, $modalInstance) {
-							$scope.ok = function () {
-								var data={
-									seed:$scope.seed,
-									size:$scope.size
-								}
-								$modalInstance.close(data);
-							  };
-						},
+						controller: function ($scope, $modalInstance) {},
 						size: 'md'
 					});
 				}else{
@@ -105,6 +108,7 @@ app.directive('editorApp', ['socket',function(socket) {
 			socket.on('resMapData',function(data){
 				setTab(1);
 				$scope.map.data=data;
+				$scope.map.backup=data;
 				answered();
 			});
 			

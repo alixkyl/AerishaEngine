@@ -1,30 +1,41 @@
-<form name="myForm">
-    <div>
-        <label>ID</label>
-        <label>{{focus._id}}</label>
-    </div>
-    <div>
-        <label>r</label>
-        <label>{{focus.r}}</label>
-    </div>
-    <div>
-        <label>q</label>
-        <label>{{focus.q}}</label>
-    </div>
-    <div>
-        <label>Name</label>
-        <input type="text" name="name" ng-model="focus.name">
-    </div>
-    <div>
-        <label>Height</label>
-        <input type="number" name="height" ng-model="focus.height">
-    </div>
-    <div>
-        <label>Moist</label>
-        <input type="number" name="moist" ng-model="focus.moist">
-    </div>
-    <div>
-        <Button id="infoBxApplyButton" onclick="">Apply</button>
-    </div>
-    <textarea >{{focus}}</textarea>
-</form>
+<div>
+	<button class="btn btn-primary" ng-click="ok()">Apply</button>
+	<button class="btn btn-warning" ng-click="cancel()">Reset</button>
+</div>
+<accordion close-others="oneAtATime">
+	<accordion-group>
+		<accordion-heading>
+			<a href>Info</a>
+        </accordion-heading>
+		<div>
+			<label>ID</label>
+			<label>{{focus._id}}</label>
+		</div>
+		<div>
+			<label>r</label>
+			<label>{{focus.r}}</label>
+		</div>
+		<div>
+			<label>q</label>
+			<label>{{focus.q}}</label>
+		</div>
+		<div>
+			<label>Name</label>
+			<input type="text" name="name" ng-model="focus.name">
+		</div>
+		<div>
+			<label>Height</label>
+			<input type="number" name="height" ng-model="focus.height">
+		</div>
+		<div>
+			<label>Moist</label>
+			<input type="number" name="moist" ng-model="focus.moist">
+		</div>
+	</accordion-group>
+	<accordion-group>
+		<accordion-heading>
+			<a href>Raw</a>
+        </accordion-heading>
+		<p >{{focus}}</p>
+	</accordion-group>
+</accordion >

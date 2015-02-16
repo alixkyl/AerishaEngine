@@ -1,3 +1,5 @@
+.gitignore
 DBlauch.bat
 launch.bat
 data
+node_modules

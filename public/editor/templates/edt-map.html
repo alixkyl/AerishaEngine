@@ -1,12 +1,32 @@
-<div class="row">
-	<label class="col-sm-2">NAME:{{data.name}}</label>
-	<div class="col-sm-1"><button type="button" class="btn btn-danger" ng-click="remMap()">Remove</button></div>
-	<div class="col-sm-1"><button type="button" class="btn btn-primary" ng-click="">Save</button></div>
-</div>
+<accordion close-others="oneAtATime">
+	<accordion-group>
+		<accordion-heading>
+			<a href >Options</a>
+        </accordion-heading>
+		<div class="row">
+			<div class="col-md-4 row">
+				<div class="col-sm-3"><button type="button" class="btn btn-primary" ng-click="">Save</button></div>
+				<div class="col-sm-3"><button type="button" class="btn btn-warning" ng-click="">Reset</button></div>
+				<div class="col-sm-3"><button type="button" class="btn btn-danger" ng-click="remMap()">Remove</button></div>
+			</div>
+			<div class="col-md-8" >
+				<div class="row"><label class="col-md-3">NAME</label><input class="col-md-3" ng-model="data.name"/></div>
+				<div class="row"><label class="col-md-3">Seed</label><a class="col-md-3" ng-model="data.seed"/></div>
+				<div class="row"><label class="col-md-3">Patch Size</label><a class="col-md-3" ng-model="data.patchSize"/></div>
+				<div class="row"><label class="col-md-3">Noise Impact</label><a class="col-md-3" ng-model="data.noise"/></div>
+				<div class="row"><label class="col-md-3">landSea</label><a class="col-md-3"  ng-model="data.landSea"/></div>
+				<div class="row"><label class="col-md-3">degree</label><a class="col-md-3" ng-model="data.degree"/></div>
+				<div class="row"><label class="col-md-3">Width</label><a class="col-md-3" ng-model="data.mwidth"/></div>
+				<div class="row"><label class="col-md-3">Height</label><a class="col-md-3" ng-model="data.mheight"/></div>
+			</div>
+		</div>
+	</accordion-group>
+</accordion >
+
 <div class="row">
 	<div class="col-md-8">
 		<div  class="drawarea">
-			<div  drawarea-canvas data="data.hexs" focus="focus" ></div>
+			<div  drawarea-canvas data="data" focus="focus" ></div>
 		</div>
 	</div>
 	<infobox focus="focus"class="col-md-4"></infobox>

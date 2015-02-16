@@ -6,7 +6,7 @@
 		<div>
 			<button type="button" class="btn btn-success" ng-click="addNewMap()">+ADD</button>
 			<div ng-repeat="map in map.list">
-				<a href ng-click="selectMap(map._id)">{{map.name}}</a>
+				<a href ng-click="selectMap($index)">{{map.name}}</a>
 			</div>
 		</div>
 	</accordion-group>

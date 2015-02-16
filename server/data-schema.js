@@ -1,14 +1,15 @@
 var mongoose = require('mongoose');
 var hexSchema = mongoose.Schema({
-				mapId:String,
-                name: String,
-                q: Number,
-                r: Number,
-                height: Number,
-                moist: Number
-            });
+	name: String,
+	q: Number,
+	r: Number,
+	height: Number,
+	moist: Number
+});
 var mapSchema=mongoose.Schema({
 	name:String,
+	width:Number,
+	height:Number,
 	hexs:[hexSchema]
 });
 exports.Map = mongoose.model('Map', mapSchema);

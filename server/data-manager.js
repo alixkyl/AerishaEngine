@@ -136,9 +136,23 @@ module.exports=new function(){
 	};
 	
 	this.addNewMap = function(dataG, callback){
+		var hexs = mapGenerator.generate({
+			height : dataG.height,
+			width : dataG.width,
+			seed : dataG.seed,
+			degree : dataG.degree,
+			landSea : dataG.landSea,
+			patchSize : dataG.patchSize,
+			noiseImpact : dataG.noiseImpact
+		});
 		var map = new schemas.Map({
-			name:dataG.size+","+dataG.seed+",25,0.05",
-			hexs:mapGenerator.generateMap(dataG.size,dataG.seed,25,0.05)
+			name : dataG.width+":"+dataG.height+","+dataG.seed+","+dataG.patchSize+","+dataG.noiseImpact,
+			width : dataG.width,
+			height : dataG.height,
+			landSea : dataG.landSea,
+			patchSize : dataG.patchSize,
+			noiseImpact : dataG.noiseImpact,
+			hexs : hexs
 		});
 		
 		map.save(function (err) {
