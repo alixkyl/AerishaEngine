@@ -1,8 +1,3 @@
-AerishaEngine
-=============
+#AerishaEngine
+Hexagon based game with a map editor
 
-hexmap engine prototype
-
-require
-==
-require nodemon for launch.bat
