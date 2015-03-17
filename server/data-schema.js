@@ -1,16 +1,10 @@
 var mongoose = require('mongoose');
-var hexSchema = mongoose.Schema({
-	name: String,
-	q: Number,
-	r: Number,
-	height: Number,
-	moist: Number
-});
+
 var mapSchema=mongoose.Schema({
 	name:String,
 	width:Number,
 	height:Number,
-	hexs:[hexSchema]
+	hexs: mongoose.Schema.Types.Mixed
 });
 exports.Map = mongoose.model('Map', mapSchema);
 /**

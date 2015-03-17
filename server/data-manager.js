@@ -145,6 +145,7 @@ module.exports=new function(){
 			patchSize : dataG.patchSize,
 			noiseImpact : dataG.noiseImpact
 		});
+
 		var map = new schemas.Map({
 			name : dataG.width+":"+dataG.height+","+dataG.seed+","+dataG.patchSize+","+dataG.noiseImpact,
 			width : dataG.width,
@@ -154,7 +155,6 @@ module.exports=new function(){
 			noiseImpact : dataG.noiseImpact,
 			hexs : hexs
 		});
-		
 		map.save(function (err) {
 			if (err) return console.error(err);
 			getMapList(callback);

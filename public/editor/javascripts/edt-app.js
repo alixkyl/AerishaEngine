@@ -20,7 +20,7 @@ app.directive('editorAppSide', ['socket',function(socket) {
 						$scope.mheight=100;
 						$scope.noise=0.1;
 						$scope.ok = function () {
-							var data={
+							var data = {
 								seed:$scope.seed,
 								patchSize:$scope.patchSize,
 								landSea:$scope.landSea,
@@ -30,11 +30,11 @@ app.directive('editorAppSide', ['socket',function(socket) {
 								noiseImpact:$scope.noise
 							}
 							$modalInstance.close(data);
-						  };
+						};
 
-						  $scope.cancel = function () {
+						$scope.cancel = function () {
 							$modalInstance.dismiss('cancel');
-						  };
+						};
 					},
 					size: 'md'
 				});
@@ -54,7 +54,6 @@ app.directive('editorAppSide', ['socket',function(socket) {
 			$scope.selectMap=function(index){
 				$scope.waitForAnswer();
 				socket.emit('getMapData',$scope.map.list[index]._id);
-
 			};
 			$scope.selectChar=function(id){
 				$scope.waitForAnswer();

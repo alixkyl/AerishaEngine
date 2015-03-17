@@ -3,9 +3,12 @@ var app = angular.module('editor-map',[])
 
 app.directive('infobox', function() {
 	return {
-		restrict:'E',
-		scope:{focus:'='},
-		templateUrl: 'editor/templates/edt-map-infobox.html'
+		restrict : 'E',
+		scope : true,
+		templateUrl : 'editor/templates/edt-map-infobox.html',
+		controller : function($scope){
+			
+		}
 	};
 });
 app.directive('drawareaCanvas',function(){
@@ -26,15 +29,15 @@ app.directive('drawareaCanvas',function(){
 			var RADIUS=15;
 			var path= getPath(RADIUS);
 			function inititateBiome(){
-				var height = Math.range(-100,100,1);
+				var height = Math.range(-10,10,1);
 				var moist = Math.range(0,10,1);
 				
 				return height.map(function(p){
 					
 					if(p>0){
-						return '#'+shadeColor(0x00FF00,-p);
+						return '#'+shadeColor(0x00FF00,-p*10);
 					}else if(p<0){
-						return '#'+shadeColor(0x0000FF,p);
+						return '#'+shadeColor(0x0000FF,p*10);
 					}else{
 						return '#FFFF00';
 					}
@@ -58,7 +61,7 @@ app.directive('drawareaCanvas',function(){
 			var SQRT3=Math.sqrt(3);
 			function initiateView(p){
 				p.view={
-					fill:BIOME[Math.floor(p.height*100)+100],
+					fill:BIOME[Math.floor(p.altitude*10)+10],
 					path : path,
 					x:RADIUS+RADIUS * SQRT3 * (p.q + p.r/2),
 					y:RADIUS+RADIUS * 3/2 * p.r
@@ -193,7 +196,7 @@ app.directive('drawareaCanvas',function(){
 app.directive('editorMap', ['socket',function(socket) {
 	return {
 		restrict:'A',
-		scope:{data:'='},
+		scope:{data:'=',backup:'@'},
 		templateUrl: 'editor/templates/edt-map.html',
 		controller:function($scope){
 			$scope.focus={};
@@ -207,6 +210,9 @@ app.directive('editorMap', ['socket',function(socket) {
 				$scope.focus=data[0];
 				console.log("Done");
 			});
+			$scope.resetfocusValues = function(){
+				console.log($scope.focus);
+			}
 		},
 		controllerAs:"map"
 	};
