@@ -12,22 +12,12 @@ app.directive('editorAppSide', ['socket',function(socket) {
 				var modalInstance = $modal.open({
 					templateUrl: 'editor/templates/edt-map-mod.html',
 					controller: function ($scope, $modalInstance) {
-						$scope.seed=0;
-						$scope.patchSize=10;
-						$scope.landSea=0.1;
-						$scope.degree=3;
 						$scope.mwidth=100;
 						$scope.mheight=100;
-						$scope.noise=0.1;
 						$scope.ok = function () {
 							var data = {
-								seed:$scope.seed,
-								patchSize:$scope.patchSize,
-								landSea:$scope.landSea,
-								degree:$scope.degree,
 								width:$scope.mwidth,
-								height:$scope.mheight,
-								noiseImpact:$scope.noise
+								height:$scope.mheight
 							}
 							$modalInstance.close(data);
 						};
@@ -40,8 +30,16 @@ app.directive('editorAppSide', ['socket',function(socket) {
 				});
 				modalInstance.result.then(
 					function (data) {
-						$scope.waitForAnswer();
-						socket.emit('addNewMap',data);
+						var m = new Hexmap.Map(data);
+						m.addLayer();
+						m.layers[1].fill({h:1});
+						m.addLayer(new Hexmap.Layer({q:50,r:50,width:20,height:20}));
+						m.layers[2].fill({seed:1});
+						m.addLayer();
+						m.layers[3].fill({seed:3});
+						$scope.map.data = m;
+						$scope.map.backup = m;
+						$scope.setTab(1);
 					}, 
 					function () {}
 				);
@@ -73,11 +71,11 @@ app.directive('editorApp', ['socket',function(socket) {
 			$scope.chars={};
 			$scope.chars.list=[];
 			
-			var tab=0;
+			var tab=1;
 			$scope.isSet = function(checkTab) {
 				return tab === checkTab;
 			};
-			var setTab = function(activeTab) {
+			$scope.setTab = function(activeTab) {
 				tab = activeTab;
 			};
 			var awaitedAnswer = 0;
@@ -105,25 +103,25 @@ app.directive('editorApp', ['socket',function(socket) {
 			}
 			
 			socket.on('resMapData',function(data){
-				setTab(1);
+				$scope.setTab(1);
 				$scope.map.data=data;
 				$scope.map.backup=data;
 				answered();
 			});
 			
 			socket.on('resMapList',function(data){
-				setTab(0);
+				$scope.setTab(0);
 				$scope.map.list=data;
 				answered();
 			});
 			socket.on('resCharData',function(data){
 				$scope.chars.data=data;
-				setTab(2);
+				$scope.setTab(2);
 				answered();
 			});
 			socket.on('resCharList',function(data){
 				$scope.chars.list=data;
-				setTab(0);
+				$scope.setTab(0);
 				answered();
 			});
 			$scope.waitForAnswer();

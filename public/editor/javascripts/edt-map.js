@@ -1,5 +1,7 @@
+"use strict";
 (function(){
 var app = angular.module('editor-map',[])
+
 
 app.directive('infobox', function() {
 	return {
@@ -13,74 +15,18 @@ app.directive('infobox', function() {
 });
 app.directive('drawareaCanvas',function(){
 	return{
-		scope : {data:'=',focus:'='},
+		scope : {view:'=',focus:'='},
 		restrict : 'A',
-		link : function(scope,element,attrs){
-			function getPath(radius){
-				var angles = Math.range(0, 2 * Math.PI, Math.PI / 3);
-				var vertex = angles.map(function(angle) {return Math.sin(angle) * radius+" "+ -Math.cos(angle) * radius;});
-				var path = vertex[0];
-				for(var i = 1 ; i < vertex.length ; i++){
-					path+=" L "+vertex[i];
-				}
-				path+=" z";
-				return path;
-			};
-			var RADIUS=15;
-			var path= getPath(RADIUS);
-			function inititateBiome(){
-				var height = Math.range(-10,10,1);
-				var moist = Math.range(0,10,1);
-				
-				return height.map(function(p){
-					
-					if(p>0){
-						return '#'+shadeColor(0x00FF00,-p*10);
-					}else if(p<0){
-						return '#'+shadeColor(0x0000FF,p*10);
-					}else{
-						return '#FFFF00';
-					}
-				});
-			}
-			var BIOME=inititateBiome();
-			
-
-			function shadeColor(color, percent) {   
-				var num = color,// parseInt(color,16),
-				amt = Math.round(2.55 * percent),
-				R = (num >> 16) + amt,
-				G = (num >> 8 & 0x00FF) + amt,
-				B = (num & 0x0000FF) + amt;
-				return (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
-			}
-
-			function getBiomeColor(height,moist){
-				return BIOME[Math.clip(Math.floor(height/2),0,4)][Math.clip(Math.floor((1+moist)/4),0,4)];
-			}
-			var SQRT3=Math.sqrt(3);
-			function initiateView(p){
-				p.view={
-					fill:BIOME[Math.floor(p.altitude*10)+10],
-					path : path,
-					x:RADIUS+RADIUS * SQRT3 * (p.q + p.r/2),
-					y:RADIUS+RADIUS * 3/2 * p.r
-				}
-				return p;
-			}
-			function hexbin(points) {return points.map(function(p) {return initiateView(p);});}
-			
-			scope.$watchCollection('data', function(newVals, oldVals) {
+		controller:function($scope,$element){
+			$scope.$watch('view', 
+				function(newVals, oldVals) {
 					if (!newVals) return;
-					scope.points=hexbin(newVals.hexs);
-					scope.initiateData(newVals.width,newVals.height);
-					scope.render();
+					console.time("draw");
+					initiateData();
+					render();
+					console.timeEnd("draw");
 					return ;
 				}, true);
-			
-		},
-		controller:function($scope,$element){
-			
 			var width = $($element[0]).width();
 			var height = $($element[0]).height();
 			var stage = new Konva.Stage({
@@ -95,16 +41,16 @@ app.directive('drawareaCanvas',function(){
 				draggable: true,
 				dragBoundFunc: function(pos) {
 					var newX = pos.x;
-					if(pos.x > 0 || root.getScale().x*root.width() < stage.width()){
+					if(pos.x > 0 || root.scaleX()*root.width() < stage.width()){
 						newX = 0 ;
-					}else if(newX < stage.width() - (root.getScale().x * root.width())){
-						newX = stage.width() - (root.getScale().x * root.width());
+					}else if(newX < stage.width() - (root.scaleX() * root.width())){
+						newX = stage.width() - (root.scaleX() * root.width());
 					}
 					var newY = pos.y;
-					if(pos.y > 0 || root.getScale().y * root.height() < stage.height()){
+					if(pos.y > 0 || root.scaleY() * root.height() < stage.height()){
 						newY = 0 ;
-					}else if(newY < stage.height() - (root.getScale().y * root.height())){
-						newY = stage.height() - (root.getScale().y * root.height());
+					}else if(newY < stage.height() - (root.scaleY() * root.height())){
+						newY = stage.height() - (root.scaleY() * root.height());
 					}
 					return {
 						x: newX,
@@ -121,20 +67,19 @@ app.directive('drawareaCanvas',function(){
 			layer.add(root);
 			var focused;
 			// generate hexes
-			$scope.initiateData=function(width, height){
+			function initiateData(){
 				background.destroyChildren();
-				root.width(width*(15 * Math.sqrt(3))+15);
-				root.height(height*(15 * 3/2)+15);
-				for (var i = 0; i<$scope.points.length; i++) {
-					var curr=$scope.points[i];
-					background.add(new Konva.Path({
-						id : i,
-						x : curr.view.x ,
-						y : curr.view.y ,
-						data: curr.view.path,
-						fill : curr.view.fill,
-						stroke:'#000000',
-						strokeEnabled:false
+				root.width(100*(15 * Math.sqrt(3))+15);
+				root.height(100*(15 * 3/2)+15);
+				for (var p in  $scope.view) {
+					var curr=$scope.view[p];
+					background.add(new Konva.RegularPolygon({
+						id: p,
+						x: curr.view.x,
+						y: curr.view.y,
+						sides: 6,
+						radius: 15,
+						fill : curr.view.fill
 					}));
 				}
 				background.cache({
@@ -145,11 +90,7 @@ app.directive('drawareaCanvas',function(){
 				});
 			};
 			
-			$scope.render=function(){
-				root.scale({
-					x : 0.1,
-					y : 0.1
-				});
+			function render(){
 				layer.draw();
 			}
 			
@@ -160,7 +101,7 @@ app.directive('drawareaCanvas',function(){
 			});
 			background.on('mouseout', function(evt) {
 				var target = evt.target;
-				target.fill($scope.points[target.id()].view.fill);
+				target.fill($scope.view[target.id()].view.fill);
 				layer.draw();
 			});
 			
@@ -174,20 +115,34 @@ app.directive('drawareaCanvas',function(){
 				}
 				focused.x(evt.target.x());
 				focused.y(evt.target.y());
-				$scope.focus=$scope.points[evt.target.id()];
+				$scope.focus=$scope.view[evt.target.id()];
 				
 				layer.draw();
 				$scope.$apply();
 			});
 			layer.on('mousewheel', function(e) {
 				var zoomAmount = (e.evt.wheelDelta/120)*0.01;
-				if((root.getScale().x+zoomAmount)>0.1 && (root.getScale().x+zoomAmount)<1){
-					root.setScale({x : root.getScale().x+zoomAmount,
-						y : root.getScale().y+zoomAmount
-					});
+				if((root.scaleX()+zoomAmount)>0.1 && (root.scaleX()+zoomAmount)<1){
+					root.scaleX(root.scaleX()+zoomAmount);
+					root.scaleY(root.scaleY()+zoomAmount);
+					var newX = root.x();
+					if(root.x() > 0 || root.scaleX()*root.width() < stage.width()){
+						newX = 0 ;
+					}else if(newX < stage.width() - (root.scaleX() * root.width())){
+						newX = stage.width() - (root.scaleX() * root.width());
+					}
+					var newY = root.y();
+					if(root.y() > 0 || root.scaleY() * root.height() < stage.height()){
+						newY = 0 ;
+					}else if(newY < stage.height() - (root.scaleY() * root.height())){
+						newY = stage.height() - (root.scaleY() * root.height());
+					}
+					root.x(newX);
+					root.y(newY);
 					layer.draw();
 				}
 			});
+			
 		}
 	};
 });
@@ -200,11 +155,34 @@ app.directive('editorMap', ['socket',function(socket) {
 		templateUrl: 'editor/templates/edt-map.html',
 		controller:function($scope){
 			$scope.focus={};
+			$scope.toggledLayers=[];
+			$scope.$watch('data', 
+				function(newVals, oldVals) {
+					if (!newVals) return;
+					for(var i in $scope.data.layers){
+						$scope.toggledLayers[i]=true;
+					}
+					console.time("view");
+					$scope.view = $scope.data.getView($scope.toggledLayers);
+					console.timeEnd("view");
+					return ;
+				}, true);
+			$scope.toggleLayer=function(i){
+				$scope.toggledLayers[i]=!$scope.toggledLayers[i];
+				$scope.view = $scope.data.getView($scope.toggledLayers);
+			};
+			$scope.isLayerToggled=function(i){
+				return $scope.toggledLayers[i];
+			};
+			$scope.selectLayer=function(i){
+				
+			};
+			
 			$scope.remMap=function(){
 				socket.emit('remMap',$scope.data._id);
 				$scope.data={};
 				$scope.focus={};
-			}
+			};
 			socket.on('maj', function (data) {
 				$scope.data=data;
 				$scope.focus=data[0];
@@ -212,7 +190,7 @@ app.directive('editorMap', ['socket',function(socket) {
 			});
 			$scope.resetfocusValues = function(){
 				console.log($scope.focus);
-			}
+			};
 		},
 		controllerAs:"map"
 	};
