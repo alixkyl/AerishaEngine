@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mapGenerator = require('HexMapGenerator');
+// var mapGenerator = require('HexMapGenerator');
 var schemas = require('./data-schema.js');
 
 function random (low, high) {
