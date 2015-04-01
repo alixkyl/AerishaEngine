@@ -6,9 +6,12 @@ Prototype of a Hexagon based game with a map editor
 - KonvaJs
 - socketIO
 - Mongoose
+- Redis
 
-
+##implemented
 - [x] login/account management
+- [x] Serverside Modular architecture
+- [x] Redix pub/sub communication between modules
 
 ##TODO
 - [ ] first page
