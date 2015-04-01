@@ -1,0 +1,24 @@
+
+.editor-menu{
+	background-color:rgba(147,0,108,.1);
+	min-height:50px;
+	display : flex;
+	flex-direction: row;
+	align-items: center;
+}
+.editor-menu a{
+	margin: 20px 20px 20px 20px;
+}
+editor-map{
+	display : flex;
+	flex:1;
+
+}
+.tools,.edit-box{
+	flex:1;
+}
+.drawarea{
+	border-color:black;
+	border-style:dotted;
+	flex:3;
+}

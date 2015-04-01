@@ -6,10 +6,11 @@ Prototype of a Hexagon based game with a map editor
 - KonvaJs
 - socketIO
 - Mongoose
-- HexMapGenerator
+
+
+- [x] login/account management
 
 ##TODO
-- [ ] login/account management
 - [ ] first page
 
 #Game
@@ -24,10 +25,9 @@ Prototype of a Hexagon based game with a map editor
 - [x] generate map
 - [x] draw map
 - [x] manipulate view(zoom/pan/click)
-![Alt text](/screenshot/HexmapWonder%20(2).png?raw=true)
+- [x] add filter view
 
 ##TODO
-- [ ] map editing
-- [ ] add filter view
+- [-] map editing
 - [ ] character creation/editing
 - [ ] implementation of game object, such as building, tech tree, organisation

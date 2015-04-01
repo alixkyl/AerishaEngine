@@ -1,0 +1,44 @@
+extends layout
+
+block styles
+  link(href="stylesheets/style.css", rel="stylesheet")
+block menus
+  nav.editor-menu( editor-menu)
+    .dropdown
+      a.dropdown-toggle(href='', data-toggle='dropdown', role='button', aria-expanded='false')
+        span.glyphicon.glyphicon-file(aria-hidden='true')
+      ul.dropdown-menu(role='menu')
+        li
+          a(href='', ng-click="create('map')") new map
+        li
+          a(href='', ng-click="create('char')") new character
+        li
+          a(href='', ng-click="create('universe')") new Universe
+    .dropdown
+          a.dropdown-toggle(href='', data-toggle='dropdown', role='button', aria-expanded='false')
+            span.glyphicon.glyphicon-floppy-open(aria-hidden='true')
+          ul.dropdown-menu(role='menu')
+            li
+              a(href='', ng-click="open('map')") open map
+            li
+              a(href='', ng-click="open('char')") open character
+            li
+              a(href='', ng-click="open('universe')") open Universe
+    div
+          a(href='', ng-click='save()')
+            span.glyphicon.glyphicon-floppy-save(aria-hidden='true')
+block contents
+  div(ng-view)
+
+block scripts
+    script(src="javascripts/edt-app.js")
+      
+      //custom libraries
+    script(src="javascripts/verb.js")
+    script(src="javascripts/simplex-noise.min.js")
+    script(src="javascripts/alea.js")
+    script(src="javascripts/hexmap-generator.js")
+    script(src="javascripts/hexmap-nurbs.js")
+    //editor
+    script(src="javascripts/edt-map.js")
+    script(src="javascripts/edt-char.js")

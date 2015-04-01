@@ -1,0 +1,21 @@
+<div class="modal-header">
+	<h3 class="modal-title">Open</h3>
+</div>
+<div class="modal-body">
+	<div>
+		<div class='row'>
+			<label class='col-sm-2' >name</label><label class="col-sm-3">id</label><label class="col-sm-2">user</label><label class="col-sm-4">comment</label>
+		</div>
+		<div class='row' ng-repeat="data in list track by $index" ng-click="select($index)">
+			<a href class="col-sm-2" ><span class=" glyphicon glyphicon-chevron-right" ng-show="isSelected($index)"></span>{{data.name}}</a>
+			<label class="col-sm-3">{{data._id}}</label>
+			<label class="col-sm-2">user</label>
+			<label class="col-sm-4">comment</label>
+			<a class="col-sm-1" href ng-click="deleteMap($index)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">OPEN</button>
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

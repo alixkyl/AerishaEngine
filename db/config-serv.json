@@ -1,0 +1,14 @@
+{
+	"APP" : {
+			"port" : "3000"
+		},
+	"GOOGLE" : {
+		"GOOGLE_CLIENT_ID"    	: "823784255743-6edeb67rrehi8u5cut2utaupfa98fdas.apps.googleusercontent.com",
+		"GOOGLE_CLIENT_SECRET"	: "98aHuwLov855wroybdY8yXNm",
+		"GOOGLE_CALLBACK_URL"	: "http://ns348570.ip-37-187-175.eu:3000/oauth2callback"
+	},
+	"REDIS":{
+		"host" : "localhost",
+		"port" : "6379"
+	}
+}

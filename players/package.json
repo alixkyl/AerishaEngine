@@ -1,0 +1,7 @@
+{
+  "name": "editor",
+  "version": "0.0.0",
+  "dependencies": {
+    "redis": "^0.12.1"
+  }
+}

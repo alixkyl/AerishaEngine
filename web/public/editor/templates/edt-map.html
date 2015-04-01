@@ -1,0 +1,59 @@
+<div class="tools">
+	<div class="well">
+		<div>
+			<div><label>Name: </label><input ng-model="data.name"/></div>
+			<div><label>Width: </label><a  >{{data.map.width}}</a></div>
+			<div><label>Height: </label><a  >{{data.map.height}}</a></div>
+		</div>
+	</div>
+	<div class="well">
+		<div class="row">
+			<label class="col-md-4" >Layers</label>
+		</div>
+		<div  ng-repeat="layer in data.map.layers track by $index" >
+			<div class="row">
+				<div class="col-xs-1">
+					<label>
+						<button class="btn btn-xs btn-default" ng-click="toggleLayer($index)">
+							<span class="glyphicon glyphicon-eye-open" ng-show="isLayerToggled($index)" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-eye-close" ng-show="! isLayerToggled($index)" aria-hidden="true"></span>
+						</button>
+					</label>
+				</div>
+				<div class="col-xs-1">
+					<label>
+						<input type="radio" name="optradio" ng-checked="selectedLayer == $index" ng-click="selectLayer($index)">
+					</label>
+				</div>
+				<div class="col-xs-8"><label>{{layer.name}}</label></div>
+			</div>
+		</div>
+	</div>
+	<div class="well">
+		<label >Brush</label>
+	
+	</div>
+</div>
+<drawarea-canvas class="drawarea" view="view" focus="focus" toggledLayers="toggledLayers"></drawarea-canvas>
+<div class="edit-box">
+	<div class="well">
+		<a href>Info</a><label>{{focused._id}}</label>
+		<div class="row">
+				<label class="col-md-6">r: {{focused.r}}</label>
+				<label class="col-md-6">q: {{focused.q}}</label>
+		</div>
+		<div>
+			<label>Name</label>
+			<input type="text" name="name" ng-model="focused.name">
+		</div>
+		<div>
+			<label>Altitude</label>
+			<input type="number" step="0.1" name="height" ng-model="focused.altitude">
+		</div>
+		<div>
+			<label>Moist</label>
+			<input type="number" name="moist" ng-model="focused.moist">
+		</div>
+	</div>
+	<p >{{focused}}</p>
+</div>
